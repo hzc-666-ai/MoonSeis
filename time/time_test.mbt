@@ -8,7 +8,27 @@ test "from header parts (known epoch)" {
 ///|
 test "leap second tolerated" {
   let t = Time::from_header(0, 2026, 229, 8, 0, 60).unwrap()
-  assert_true(t.to_epoch_ns() > 0L)
+  let t59 = Time::from_header(0, 2026, 229, 8, 0, 59).unwrap()
+  assert_eq(t.to_epoch_ns(), t59.to_epoch_ns())
+}
+
+///|
+test "invalid inputs return None" {
+  assert_true(Time::from_header(0, 2023, 0, 0, 0, 0) is None)
+  assert_true(Time::from_header(0, 2023, 367, 0, 0, 0) is None)
+  assert_true(Time::from_header(0, 2023, 1, 24, 0, 0) is None)
+  assert_true(Time::from_header(0, 2023, 1, 0, 60, 0) is None)
+  assert_true(Time::from_header(0, 2023, 1, 0, 0, 61) is None)
+  assert_true(Time::from_header(0, 2023, 366, 0, 0, 0) is None)
+}
+
+///|
+test "leap year day boundaries" {
+  let feb29 = Time::from_header(0, 2024, 60, 0, 0, 0).unwrap()
+  assert_eq(feb29.to_epoch_ns(), Time::from_header(0, 2024, 60, 0, 0, 0).unwrap().to_epoch_ns())
+  assert_eq(feb29.to_iso8601(), "2024-02-29T00:00:00.000000Z")
+  let dec31 = Time::from_header(0, 2024, 366, 0, 0, 0).unwrap()
+  assert_eq(dec31.to_iso8601(), "2024-12-31T00:00:00.000000Z")
 }
 
 ///|

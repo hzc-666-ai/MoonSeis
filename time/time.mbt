@@ -4,6 +4,9 @@ pub(all) struct Time {
   ns : Int64
 } derive(Eq, Debug)
 
+let ns_per_second : Int64 = 1_000_000_000L
+let seconds_per_day : Int64 = 86_400L
+
 ///|
 /// Construct from miniSEED header parts (nanos, year, day-of-year, h:m:s).
 /// `sec == 60` is a positive leap second, clamped to 59.
@@ -29,8 +32,8 @@ pub fn Time::from_header(
   let (month, day) = md
   let days = days_from_civil(year, month, day)
   let seconds_of_day = (hour * 3600 + min * 60 + s).to_int64()
-  let total_sec = days.to_int64() * 86_400L + seconds_of_day
-  let ns = total_sec * 1_000_000_000L + nanos.to_int64()
+  let total_sec = days.to_int64() * seconds_per_day + seconds_of_day
+  let ns = total_sec * ns_per_second + nanos.to_int64()
   Some({ ns: ns })
 }
 
@@ -51,7 +54,7 @@ pub fn Time::add_ns(self : Time, delta : Int64) -> Time {
 
 ///|
 pub fn Time::diff_secs(self : Time, other : Time) -> Double {
-  (self.ns - other.ns).to_double() / 1_000_000_000.0
+  (self.ns - other.ns).to_double() / ns_per_second.to_double()
 }
 
 ///|
@@ -68,10 +71,10 @@ pub fn Time::to_iso8601(self : Time) -> String {
 
 ///|
 fn Time::to_days_secs(self : Time) -> (Int, Int, Int) {
-  let whole_secs = self.ns / 1_000_000_000L
-  let rem_ns = self.ns % 1_000_000_000L
-  let days = (whole_secs / 86_400L).to_int()
-  let secs_of_day = (whole_secs % 86_400L).to_int()
+  let whole_secs = self.ns / ns_per_second
+  let rem_ns = self.ns % ns_per_second
+  let days = (whole_secs / seconds_per_day).to_int()
+  let secs_of_day = (whole_secs % seconds_per_day).to_int()
   let micros = (rem_ns / 1_000L).to_int()
   (days, secs_of_day, micros)
 }
@@ -107,6 +110,9 @@ fn day_of_year_to_month_day(year : Int, doy : Int) -> (Int, Int)? {
     return None
   }
   let leap = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
+  if doy == 366 && !leap {
+    return None
+  }
   let cum : Array[Int] = if leap {
     [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366]
   } else {
