@@ -19,12 +19,12 @@ test "parse abbreviated forms" {
 
 ///|
 test "reject invalid sid" {
-  assert_true(@sid.parse("IU_ANMO").is_err())
-  assert_true(@sid.parse("FDSN:").is_err())
-  assert_true(@sid.parse("FDSN:IU__00_B_H_Z").is_err())
-  assert_true(@sid.parse("FDSN:IU_ANMO_--_B_H_Z").is_err())
-  assert_true(@sid.parse("FDSN:iu_anmo_00_B_H_Z").is_err())
-  assert_true(@sid.parse("FDSN:IU_ANMO_00_B_H_Z_").is_err())
+  assert_true(@sid.parse("IU_ANMO") is Err(_))
+  assert_true(@sid.parse("FDSN:") is Err(_))
+  assert_true(@sid.parse("FDSN:IU__00_B_H_Z") is Err(_))
+  assert_true(@sid.parse("FDSN:IU_ANMO_--_B_H_Z") is Err(_))
+  assert_true(@sid.parse("FDSN:iu_anmo_00_B_H_Z") is Err(_))
+  assert_true(@sid.parse("FDSN:IU_ANMO_00_B_H_Z_") is Err(_))
 }
 
 ///|

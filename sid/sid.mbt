@@ -26,7 +26,7 @@ pub fn parse(input : String) -> Result[SourceIdentifier, SidError] {
   if !input.has_prefix("FDSN:") {
     return Err(SidError::new("missing FDSN: prefix", input))
   }
-  let body = input.substring(start=5)
+  let body = input[5:]
   let parts = body.split("_").to_array()
   if parts.length() > 6 {
     return Err(SidError::new("too many underscore segments", input))
