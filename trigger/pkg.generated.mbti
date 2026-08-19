@@ -1,0 +1,37 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Noverberrain/moonseis/trigger"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn classic_sta_lta(Array[Double], sta_len? : Int, lta_len? : Int, trigger_on? : Double, trigger_off? : Double, min_duration? : Int, pad_before? : Int, pad_after? : Int) -> Array[Event]
+
+pub fn recursive_sta_lta(Array[Double], sta_len? : Int, lta_len? : Int, trigger_on? : Double, trigger_off? : Double, min_duration? : Int, pad_before? : Int, pad_after? : Int) -> Array[Event]
+
+// Errors
+
+// Types and methods
+pub(all) struct Event {
+  start_index : Int
+  end_index : Int
+  peak_ratio : Double
+  trigger_type : TriggerType
+  confidence : Double
+} derive(Eq, @debug.Debug)
+pub fn Event::confidence(Self) -> Double
+pub fn Event::end_index(Self) -> Int
+pub fn Event::peak_ratio(Self) -> Double
+pub fn Event::start_index(Self) -> Int
+pub fn Event::trigger_type(Self) -> TriggerType
+
+pub(all) enum TriggerType {
+  Classic
+  Recursive
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
+

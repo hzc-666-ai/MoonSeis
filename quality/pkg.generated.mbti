@@ -1,0 +1,68 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Noverberrain/moonseis/quality"
+
+import {
+  "Noverberrain/moonseis/trace",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn clipping_rule(min_count? : Int) -> (@trace.Trace) -> Array[Issue]
+
+pub fn constant_rule(min_run? : Int) -> (@trace.Trace) -> Array[Issue]
+
+pub fn default_rules() -> Array[(@trace.Trace) -> Array[Issue]]
+
+pub fn inspect_trace(@trace.Trace, Array[(@trace.Trace) -> Array[Issue]]) -> QualityReport
+
+pub fn spike_rule(ratio? : Double) -> (@trace.Trace) -> Array[Issue]
+
+// Errors
+
+// Types and methods
+pub(all) struct Issue {
+  severity : Severity
+  message : String
+} derive(Eq, @debug.Debug)
+pub fn Issue::message(Self) -> String
+pub fn Issue::severity(Self) -> Severity
+
+pub(all) struct Metrics {
+  max_amplitude : Double
+  mean : Double
+  stddev : Double
+  clip_ratio : Double
+  constant_runs : Int
+  completeness : Double
+} derive(Eq, @debug.Debug)
+pub fn Metrics::clip_ratio(Self) -> Double
+pub fn Metrics::completeness(Self) -> Double
+pub fn Metrics::constant_runs(Self) -> Int
+pub fn Metrics::max_amplitude(Self) -> Double
+pub fn Metrics::mean(Self) -> Double
+pub fn Metrics::stddev(Self) -> Double
+
+pub(all) struct QualityReport {
+  sid : String
+  issues : Array[Issue]
+  metrics : Metrics
+  score : Int
+} derive(Eq, @debug.Debug)
+pub fn QualityReport::issue_count(Self) -> Int
+pub fn QualityReport::issues(Self) -> Array[Issue]
+pub fn QualityReport::metrics(Self) -> Metrics
+pub fn QualityReport::score(Self) -> Int
+pub fn QualityReport::sid(Self) -> String
+
+pub(all) enum Severity {
+  Info
+  Warning
+  Error
+  Critical
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+pub type Rule = (@trace.Trace) -> Array[Issue]
+
+// Traits
+

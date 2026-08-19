@@ -1,0 +1,69 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Noverberrain/moonseis/trace"
+
+import {
+  "Noverberrain/moonseis/record",
+  "Noverberrain/moonseis/time",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn build_traces(Array[@record.Record]) -> Array[Trace]
+
+pub fn inspect_segments(Array[@record.Record]) -> SegmentReport
+
+// Errors
+
+// Types and methods
+pub(all) struct SegmentIssue {
+  kind : SegmentKind
+  at : @time.Time
+  detail : String
+} derive(Eq, @debug.Debug)
+pub fn SegmentIssue::at(Self) -> @time.Time
+pub fn SegmentIssue::detail(Self) -> String
+pub fn SegmentIssue::kind(Self) -> SegmentKind
+
+pub(all) enum SegmentKind {
+  Gap
+  Overlap
+  Duplicate
+  RateChange
+} derive(Eq, @debug.Debug)
+
+pub(all) struct SegmentReport {
+  gap_count : Int
+  overlap_count : Int
+  duplicate_count : Int
+  rate_change_count : Int
+  total_gap_seconds : Double
+  issues : Array[SegmentIssue]
+} derive(Eq, @debug.Debug)
+pub fn SegmentReport::duplicate_count(Self) -> Int
+pub fn SegmentReport::gap_count(Self) -> Int
+pub fn SegmentReport::issues(Self) -> Array[SegmentIssue]
+pub fn SegmentReport::overlap_count(Self) -> Int
+pub fn SegmentReport::rate_change_count(Self) -> Int
+pub fn SegmentReport::total_gap_seconds(Self) -> Double
+
+pub(all) struct Trace {
+  sid : String
+  start : @time.Time
+  end : @time.Time
+  sample_rate : Double
+  samples : Array[Double]
+  records : Array[@record.Record]
+} derive(Eq, @debug.Debug)
+pub fn Trace::duration_secs(Self) -> Double
+pub fn Trace::end_time(Self) -> @time.Time
+pub fn Trace::records(Self) -> Array[@record.Record]
+pub fn Trace::sample_count(Self) -> Int
+pub fn Trace::sample_rate(Self) -> Double
+pub fn Trace::samples(Self) -> Array[Double]
+pub fn Trace::sid(Self) -> String
+pub fn Trace::start_time(Self) -> @time.Time
+
+// Type aliases
+
+// Traits
+

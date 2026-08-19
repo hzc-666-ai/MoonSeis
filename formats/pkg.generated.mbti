@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Noverberrain/moonseis/formats"
+
+import {
+  "Noverberrain/moonseis/record",
+  "Noverberrain/moonseis/trace",
+  "Noverberrain/moonseis/trigger",
+}
+
+// Values
+pub fn events_markdown(Array[@trigger.Event]) -> String
+
+pub fn inspect_json(Array[@record.Record]) -> String
+
+pub fn record_json(@record.Record) -> String
+
+pub fn trace_csv(@trace.Trace) -> String
+
+pub fn trace_geocsv(@trace.Trace) -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

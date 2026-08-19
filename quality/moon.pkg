@@ -1,0 +1,7 @@
+import {
+  "Noverberrain/moonseis/trace",
+}
+
+import {
+  "Noverberrain/moonseis/time",
+} for "test"

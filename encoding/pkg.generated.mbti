@@ -1,0 +1,41 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Noverberrain/moonseis/encoding"
+
+import {
+  "Noverberrain/moonseis/miniseed3",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn decode_samples(Int, UInt, Bytes) -> Result[Samples, @miniseed3.ParseError]
+
+pub fn float32_code() -> Int
+
+pub fn float64_code() -> Int
+
+pub fn int16_code() -> Int
+
+pub fn int32_code() -> Int
+
+pub fn opaque_code() -> Int
+
+pub fn steim1_code() -> Int
+
+pub fn steim2_code() -> Int
+
+pub fn steim3_code() -> Int
+
+pub fn text_code() -> Int
+
+// Errors
+
+// Types and methods
+pub(all) enum Samples {
+  FloatArray(Array[Double])
+  Raw(Bytes)
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
+

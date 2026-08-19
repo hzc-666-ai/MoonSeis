@@ -1,4 +1,5 @@
 import {
-  "Noverberrain/moonseis/sid",
-  "Noverberrain/moonseis/time",
+  "Noverberrain/moonseis/miniseed3",
+  "Noverberrain/moonseis/record",
+  "Noverberrain/moonseis/trace",
 }

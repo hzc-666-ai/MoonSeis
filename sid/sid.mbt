@@ -9,12 +9,35 @@ pub(all) struct SourceIdentifier {
   subsource : String
 } derive(Eq, Debug)
 
-pub fn SourceIdentifier::network(self : SourceIdentifier) -> String { self.network }
-pub fn SourceIdentifier::station(self : SourceIdentifier) -> String { self.station }
-pub fn SourceIdentifier::location(self : SourceIdentifier) -> String { self.location }
-pub fn SourceIdentifier::band(self : SourceIdentifier) -> String { self.band }
-pub fn SourceIdentifier::source(self : SourceIdentifier) -> String { self.source }
-pub fn SourceIdentifier::subsource(self : SourceIdentifier) -> String { self.subsource }
+///|
+pub fn SourceIdentifier::network(self : SourceIdentifier) -> String {
+  self.network
+}
+
+///|
+pub fn SourceIdentifier::station(self : SourceIdentifier) -> String {
+  self.station
+}
+
+///|
+pub fn SourceIdentifier::location(self : SourceIdentifier) -> String {
+  self.location
+}
+
+///|
+pub fn SourceIdentifier::band(self : SourceIdentifier) -> String {
+  self.band
+}
+
+///|
+pub fn SourceIdentifier::source(self : SourceIdentifier) -> String {
+  self.source
+}
+
+///|
+pub fn SourceIdentifier::subsource(self : SourceIdentifier) -> String {
+  self.subsource
+}
 
 ///|
 pub fn SourceIdentifier::to_string(self : SourceIdentifier) -> String {
@@ -76,7 +99,8 @@ pub fn parse(input : String) -> Result[SourceIdentifier, SidError] {
   Ok({ network, station, location, band, source, subsource })
 }
 
-///| Pad parts (StringView array) to exactly 6 Strings (empty appended).
+///|
+/// Pad parts (StringView array) to exactly 6 Strings (empty appended).
 fn fill_parts(parts : Array[StringView]) -> Array[String] {
   let out : Array[String] = []
   let mut i = 0
@@ -91,7 +115,8 @@ fn fill_parts(parts : Array[StringView]) -> Array[String] {
   out
 }
 
-///| Allowed charset: [A-Z0-9]; station/location additionally allow '-'.
+///|
+/// Allowed charset: [A-Z0-9]; station/location additionally allow '-'.
 fn valid_chars(s : String, allow_dash : Bool) -> Bool {
   let mut i = 0
   while i < s.length() {

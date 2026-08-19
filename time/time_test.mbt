@@ -14,6 +14,8 @@ test "leap second tolerated" {
 
 ///|
 test "invalid inputs return None" {
+  assert_true(Time::from_header(1_000_000_000, 2023, 1, 0, 0, 0) is None)
+  assert_true(Time::from_header(0, 65535, 1, 0, 0, 0) is None)
   assert_true(Time::from_header(0, 2023, 0, 0, 0, 0) is None)
   assert_true(Time::from_header(0, 2023, 367, 0, 0, 0) is None)
   assert_true(Time::from_header(0, 2023, 1, 24, 0, 0) is None)
@@ -23,9 +25,24 @@ test "invalid inputs return None" {
 }
 
 ///|
+test "negative epoch values use floor division" {
+  assert_eq(
+    Time::from_epoch_ns(-1L).to_iso8601(),
+    "1969-12-31T23:59:59.999999Z",
+  )
+  assert_eq(
+    Time::from_epoch_ns(-1_000_000_001L).to_iso8601(),
+    "1969-12-31T23:59:58.999999Z",
+  )
+}
+
+///|
 test "leap year day boundaries" {
   let feb29 = Time::from_header(0, 2024, 60, 0, 0, 0).unwrap()
-  assert_eq(feb29.to_epoch_ns(), Time::from_header(0, 2024, 60, 0, 0, 0).unwrap().to_epoch_ns())
+  assert_eq(
+    feb29.to_epoch_ns(),
+    Time::from_header(0, 2024, 60, 0, 0, 0).unwrap().to_epoch_ns(),
+  )
   assert_eq(feb29.to_iso8601(), "2024-02-29T00:00:00.000000Z")
   let dec31 = Time::from_header(0, 2024, 366, 0, 0, 0).unwrap()
   assert_eq(dec31.to_iso8601(), "2024-12-31T00:00:00.000000Z")

@@ -1,0 +1,11 @@
+import {
+  "Noverberrain/moonseis/record",
+  "Noverberrain/moonseis/trace",
+  "Noverberrain/moonseis/trigger",
+}
+
+import {
+  "Noverberrain/moonseis/encoding",
+  "Noverberrain/moonseis/miniseed3",
+  "Noverberrain/moonseis/time",
+} for "test"

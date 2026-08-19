@@ -4,7 +4,10 @@ pub(all) struct Time {
   ns : Int64
 } derive(Eq, Debug)
 
+///|
 let ns_per_second : Int64 = 1_000_000_000L
+
+///|
 let seconds_per_day : Int64 = 86_400L
 
 ///|
@@ -18,7 +21,15 @@ pub fn Time::from_header(
   min : Int,
   sec : Int,
 ) -> Time? {
-  if doy < 1 || doy > 366 || hour < 0 || hour > 23 || min < 0 || min > 59 {
+  if nanos >= 1_000_000_000 ||
+    year < 1677 ||
+    year > 2262 ||
+    doy < 1 ||
+    doy > 366 ||
+    hour < 0 ||
+    hour > 23 ||
+    min < 0 ||
+    min > 59 {
     return None
   }
   let s = if sec == 60 { 59 } else { sec }
@@ -34,12 +45,12 @@ pub fn Time::from_header(
   let seconds_of_day = (hour * 3600 + min * 60 + s).to_int64()
   let total_sec = days.to_int64() * seconds_per_day + seconds_of_day
   let ns = total_sec * ns_per_second + nanos.to_int64()
-  Some({ ns: ns })
+  Some({ ns, })
 }
 
 ///|
 pub fn Time::from_epoch_ns(ns : Int64) -> Time {
-  { ns: ns }
+  { ns, }
 }
 
 ///|
@@ -63,23 +74,36 @@ pub fn Time::to_iso8601(self : Time) -> String {
   let (days, secs_of_day, micros) = self.to_days_secs()
   let (year, month, day) = civil_from_days(days)
   let hour = secs_of_day / 3600
-  let min = (secs_of_day % 3600) / 60
+  let min = secs_of_day % 3600 / 60
   let sec = secs_of_day % 60
-  let micro_str = if micros == 0 { "000000" } else { pad_left(micros.to_string(), 6) }
+  let micro_str = if micros == 0 {
+    "000000"
+  } else {
+    pad_left(micros.to_string(), 6)
+  }
   "\{pad_left(year.to_string(), 4)}-\{pad_left(month.to_string(), 2)}-\{pad_left(day.to_string(), 2)}T\{pad_left(hour.to_string(), 2)}:\{pad_left(min.to_string(), 2)}:\{pad_left(sec.to_string(), 2)}.\{micro_str}Z"
 }
 
 ///|
 fn Time::to_days_secs(self : Time) -> (Int, Int, Int) {
-  let whole_secs = self.ns / ns_per_second
-  let rem_ns = self.ns % ns_per_second
-  let days = (whole_secs / seconds_per_day).to_int()
-  let secs_of_day = (whole_secs % seconds_per_day).to_int()
+  let mut whole_secs = self.ns / ns_per_second
+  let mut rem_ns = self.ns % ns_per_second
+  if rem_ns < 0L {
+    whole_secs = whole_secs - 1L
+    rem_ns = rem_ns + ns_per_second
+  }
+  let mut days = whole_secs / seconds_per_day
+  let mut secs_of_day = whole_secs % seconds_per_day
+  if secs_of_day < 0L {
+    days = days - 1L
+    secs_of_day = secs_of_day + seconds_per_day
+  }
   let micros = (rem_ns / 1_000L).to_int()
-  (days, secs_of_day, micros)
+  (days.to_int(), secs_of_day.to_int(), micros)
 }
 
-///| Howard Hinnant civil_from_days: days since 1970-01-01 -> (y, m, d).
+///|
+/// Howard Hinnant civil_from_days: days since 1970-01-01 -> (y, m, d).
 fn civil_from_days(z : Int) -> (Int, Int, Int) {
   let z = z + 719468
   let era = (if z >= 0 { z } else { z - 146096 }) / 146097
@@ -93,7 +117,8 @@ fn civil_from_days(z : Int) -> (Int, Int, Int) {
   (if m <= 2 { y + 1 } else { y }, m, d)
 }
 
-///| Howard Hinnant days_from_civil: (y, m, d) -> days since 1970-01-01.
+///|
+/// Howard Hinnant days_from_civil: (y, m, d) -> days since 1970-01-01.
 fn days_from_civil(y : Int, m : Int, d : Int) -> Int {
   let y = if m <= 2 { y - 1 } else { y }
   let era = (if y >= 0 { y } else { y - 399 }) / 400
@@ -104,7 +129,8 @@ fn days_from_civil(y : Int, m : Int, d : Int) -> Int {
   era * 146097 + doe - 719468
 }
 
-///| day-of-year (1-based) -> (month, day). None when out of range.
+///|
+/// day-of-year (1-based) -> (month, day). None when out of range.
 fn day_of_year_to_month_day(year : Int, doy : Int) -> (Int, Int)? {
   if doy < 1 || doy > 366 {
     return None
@@ -126,7 +152,8 @@ fn day_of_year_to_month_day(year : Int, doy : Int) -> (Int, Int)? {
   Some((month, day))
 }
 
-///| Left-pad a string to a target length with '0'.
+///|
+/// Left-pad a string to a target length with '0'.
 fn pad_left(s : String, len : Int) -> String {
   if s.length() >= len {
     return s

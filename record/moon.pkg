@@ -1,0 +1,8 @@
+import {
+  "moonbitlang/core/json",
+  "Noverberrain/moonseis/binary",
+  "Noverberrain/moonseis/encoding",
+  "Noverberrain/moonseis/miniseed3",
+  "Noverberrain/moonseis/sid",
+  "Noverberrain/moonseis/time",
+}

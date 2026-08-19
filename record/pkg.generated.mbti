@@ -1,0 +1,41 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Noverberrain/moonseis/record"
+
+import {
+  "Noverberrain/moonseis/encoding",
+  "Noverberrain/moonseis/miniseed3",
+  "Noverberrain/moonseis/time",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn iterate_records(Bytes) -> Array[Result[Record, @miniseed3.ParseError]]
+
+pub fn parse_record(Bytes) -> Result[Record, @miniseed3.ParseError]
+
+pub fn total_length(@miniseed3.FixedHeader) -> Int
+
+// Errors
+
+// Types and methods
+pub(all) struct Record {
+  header : @miniseed3.FixedHeader
+  sid : String
+  extra_headers : String
+  samples : @encoding.Samples
+  start : @time.Time
+  raw : Bytes
+} derive(Eq, @debug.Debug)
+pub fn Record::end_time(Self) -> @time.Time?
+pub fn Record::extra_headers(Self) -> String
+pub fn Record::header(Self) -> @miniseed3.FixedHeader
+pub fn Record::raw(Self) -> Bytes
+pub fn Record::sample_data(Self) -> @encoding.Samples
+pub fn Record::samples(Self) -> Array[Double]
+pub fn Record::sid(Self) -> String
+pub fn Record::start_time(Self) -> @time.Time
+
+// Type aliases
+
+// Traits
+

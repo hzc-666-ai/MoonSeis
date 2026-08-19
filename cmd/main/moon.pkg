@@ -1,0 +1,16 @@
+import {
+  "moonbitlang/core/env",
+  "Noverberrain/moonseis/formats",
+  "Noverberrain/moonseis/miniseed3",
+  "Noverberrain/moonseis/quality",
+  "Noverberrain/moonseis/record",
+  "Noverberrain/moonseis/signal",
+  "Noverberrain/moonseis/trace",
+  "Noverberrain/moonseis/trigger",
+}
+
+pkgtype(kind: "executable")
+
+options(
+  "native-stub": [ "fileio.c" ],
+)

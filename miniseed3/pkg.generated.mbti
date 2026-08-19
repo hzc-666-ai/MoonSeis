@@ -1,0 +1,75 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Noverberrain/moonseis/miniseed3"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn crc32c(Bytes) -> UInt
+
+pub fn crc32c_region(Bytes, Int, Int, Int) -> UInt
+
+pub fn fixed_header_size() -> Int
+
+pub fn parse_header(Bytes, Int) -> Result[FixedHeader, ParseError]
+
+pub fn verify_crc(Bytes, Int, Int, Int) -> Bool
+
+// Errors
+pub(all) suberror ParseError {
+  BadMagic
+  BadVersion(Int)
+  Truncated(Int)
+  LengthMismatch(String)
+  BadCrc(UInt, UInt)
+  BadSampleRate(Double)
+  BadSampleCount(String)
+  BadSid(String)
+  BadTime(String)
+  UnsupportedEncoding(Int)
+  MalformedExtraHeaders(String)
+}
+pub fn ParseError::to_string(Self) -> String
+
+// Types and methods
+pub(all) struct FixedHeader {
+  version : Int
+  flags : Int
+  time_ns : UInt
+  time_year : Int
+  time_doy : Int
+  time_hour : Int
+  time_min : Int
+  time_sec : Int
+  encoding : Int
+  sample_rate : Double
+  sample_count : UInt
+  crc : UInt
+  publication_version : Int
+  identifier_length : Int
+  extra_headers_length : Int
+  payload_length : UInt
+} derive(Eq, @debug.Debug)
+pub fn FixedHeader::crc(Self) -> UInt
+pub fn FixedHeader::encoding(Self) -> Int
+pub fn FixedHeader::extra_headers_length(Self) -> Int
+pub fn FixedHeader::flags(Self) -> Int
+pub fn FixedHeader::identifier_length(Self) -> Int
+pub fn FixedHeader::payload_length(Self) -> UInt
+pub fn FixedHeader::publication_version(Self) -> Int
+pub fn FixedHeader::rate_hz(Self) -> Double
+pub fn FixedHeader::sample_count(Self) -> UInt
+pub fn FixedHeader::sample_rate(Self) -> Double
+pub fn FixedHeader::time_doy(Self) -> Int
+pub fn FixedHeader::time_hour(Self) -> Int
+pub fn FixedHeader::time_min(Self) -> Int
+pub fn FixedHeader::time_ns(Self) -> UInt
+pub fn FixedHeader::time_sec(Self) -> Int
+pub fn FixedHeader::time_year(Self) -> Int
+pub fn FixedHeader::version(Self) -> Int
+
+// Type aliases
+
+// Traits
+

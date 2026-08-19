@@ -1,0 +1,38 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Noverberrain/moonseis/signal"
+
+// Values
+pub fn demean(Array[Double]) -> Array[Double]
+
+pub fn detrend(Array[Double]) -> Array[Double]
+
+pub fn energy(Array[Double]) -> Double
+
+pub fn hann_taper(Array[Double], Int) -> Array[Double]
+
+pub fn kurtosis(Array[Double]) -> Double
+
+pub fn mean(Array[Double]) -> Double
+
+pub fn normalize(Array[Double]) -> Array[Double]
+
+pub fn peak(Array[Double]) -> Double
+
+pub fn resample_basic(Array[Double], Int, Int) -> Array[Double]
+
+pub fn rms(Array[Double]) -> Double
+
+pub fn skewness(Array[Double]) -> Double
+
+pub fn sliding_rms(Array[Double], Int) -> Array[Double]
+
+pub fn stddev(Array[Double]) -> Double
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

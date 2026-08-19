@@ -1,0 +1,38 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Noverberrain/moonseis/binary"
+
+// Values
+pub fn concat(Array[Bytes]) -> Bytes
+
+pub fn read_byte(Bytes, Int) -> Int
+
+pub fn read_f32(Bytes, Int) -> Float
+
+pub fn read_f64(Bytes, Int) -> Double
+
+pub fn read_i16(Bytes, Int) -> Int
+
+pub fn read_i32(Bytes, Int) -> Int
+
+pub fn read_u16(Bytes, Int) -> Int
+
+pub fn read_uint(Bytes, Int) -> UInt
+
+pub fn slice(Bytes, Int, Int) -> Bytes
+
+pub fn write_byte(Int) -> Bytes
+
+pub fn write_f64(Double) -> Bytes
+
+pub fn write_u16(Int) -> Bytes
+
+pub fn write_uint(UInt) -> Bytes
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

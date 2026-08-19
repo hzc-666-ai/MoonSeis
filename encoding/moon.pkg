@@ -1,0 +1,4 @@
+import {
+  "Noverberrain/moonseis/binary",
+  "Noverberrain/moonseis/miniseed3",
+}
