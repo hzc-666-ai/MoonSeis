@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Noverberrain/moonseis/internal/fixtures"
+package "hzc-666-ai/moonseis/internal/fixtures"
 
 // Values
 pub fn int16_record(String, Int, Int, Int, Int, Int, Double, Array[Int]) -> Bytes

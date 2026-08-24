@@ -45,7 +45,7 @@ moon run cmd/main -- <command> <file> [format]
 | `traces` | 输出重建后的 trace 摘要 |
 | `quality` | 执行默认质量规则并评分 |
 | `detect` | 对每条 trace 运行 Classic STA/LTA |
-| `convert` | 转换为 `json`、`csv`、`geocsv`、`md` 或 `text` |
+| `convert` | 转换为 `json`、`csv`、`geocsv`、`md`、`html` 或 `text` |
 
 退出码：成功为 0；参数或文件错误为 1；`validate` 发现无效记录时为 2。
 
@@ -57,6 +57,7 @@ moon run cmd/main -- validate fixtures/example.mseed
 moon run cmd/main -- quality fixtures/example.mseed
 moon run cmd/main -- detect fixtures/example.mseed
 moon run cmd/main -- convert fixtures/example.mseed csv
+moon run cmd/main -- convert fixtures/example.mseed html > report.html
 ```
 
 ## 库入口

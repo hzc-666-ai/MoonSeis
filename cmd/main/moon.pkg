@@ -1,12 +1,12 @@
 import {
   "moonbitlang/core/env",
-  "Noverberrain/moonseis/formats",
-  "Noverberrain/moonseis/miniseed3",
-  "Noverberrain/moonseis/quality",
-  "Noverberrain/moonseis/record",
-  "Noverberrain/moonseis/signal",
-  "Noverberrain/moonseis/trace",
-  "Noverberrain/moonseis/trigger",
+  "hzc-666-ai/moonseis/formats",
+  "hzc-666-ai/moonseis/miniseed3",
+  "hzc-666-ai/moonseis/quality",
+  "hzc-666-ai/moonseis/record",
+  "hzc-666-ai/moonseis/signal",
+  "hzc-666-ai/moonseis/trace",
+  "hzc-666-ai/moonseis/trigger",
 }
 
 pkgtype(kind: "executable")

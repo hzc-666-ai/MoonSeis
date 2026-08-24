@@ -1,13 +1,15 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Noverberrain/moonseis/formats"
+package "hzc-666-ai/moonseis/formats"
 
 import {
-  "Noverberrain/moonseis/record",
-  "Noverberrain/moonseis/trace",
-  "Noverberrain/moonseis/trigger",
+  "hzc-666-ai/moonseis/record",
+  "hzc-666-ai/moonseis/trace",
+  "hzc-666-ai/moonseis/trigger",
 }
 
 // Values
+pub fn analysis_html(Array[@trace.Trace]) -> String
+
 pub fn events_markdown(Array[@trigger.Event]) -> String
 
 pub fn inspect_json(Array[@record.Record]) -> String

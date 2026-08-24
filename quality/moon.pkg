@@ -1,7 +1,7 @@
 import {
-  "Noverberrain/moonseis/trace",
+  "hzc-666-ai/moonseis/trace",
 }
 
 import {
-  "Noverberrain/moonseis/time",
+  "hzc-666-ai/moonseis/time",
 } for "test"

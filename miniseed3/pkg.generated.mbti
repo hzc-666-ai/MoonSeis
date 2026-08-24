@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Noverberrain/moonseis/miniseed3"
+package "hzc-666-ai/moonseis/miniseed3"
 
 import {
   "moonbitlang/core/debug",

@@ -51,7 +51,7 @@ moon run cmd/main -- <command> <file> [format]
 | `traces` | 输出重建后的 trace 摘要 |
 | `quality` | 执行默认质量规则并生成评分 |
 | `detect` | 对每条 trace 运行 Classic STA/LTA 事件候选检测 |
-| `convert` | 转换为 `json`、`csv`、`geocsv`、`md` 或 `text` |
+| `convert` | 转换为 `json`、`csv`、`geocsv`、`md`、`html` 或 `text` |
 
 常用示例：
 
@@ -61,6 +61,7 @@ moon run cmd/main -- validate fixtures/example.mseed
 moon run cmd/main -- quality fixtures/example.mseed
 moon run cmd/main -- detect fixtures/example.mseed
 moon run cmd/main -- convert fixtures/example.mseed csv
+moon run cmd/main -- convert fixtures/example.mseed html > report.html
 ```
 
 退出码约定：
@@ -98,7 +99,7 @@ trace/              trace 重建与分段诊断
 quality/            质量指标、质量规则与评分
 signal/             波形预处理与统计函数
 trigger/            STA/LTA 事件候选检测
-formats/            JSON / CSV / GeoCSV / Markdown / Text 输出适配器
+formats/            JSON / CSV / GeoCSV / Markdown / HTML / Text 输出适配器
 cmd/main/           native 命令行入口
 internal/fixtures/  测试 fixture 生成器
 fixtures/           可直接运行的示例数据

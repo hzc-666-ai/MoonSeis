@@ -1,8 +1,8 @@
 import {
-  "Noverberrain/moonseis/binary",
-  "Noverberrain/moonseis/miniseed3",
+  "hzc-666-ai/moonseis/binary",
+  "hzc-666-ai/moonseis/miniseed3",
 }
 
 import {
-  "Noverberrain/moonseis/record",
+  "hzc-666-ai/moonseis/record",
 } for "test"

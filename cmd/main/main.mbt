@@ -13,7 +13,7 @@ fn usage() -> Unit {
   println(
     "Commands: inspect, records, validate, traces, quality, detect, convert",
   )
-  println("Formats for convert: json, csv, geocsv, md, text")
+  println("Formats for convert: json, csv, geocsv, md, html, text")
 }
 
 ///|
@@ -207,6 +207,7 @@ fn command_convert(raw : Bytes, format : String) -> Bool {
           @formats.events_markdown(@trigger.classic_sta_lta(trace.samples())),
         )
       }
+    "html" => println(@formats.analysis_html(traces))
     "text" =>
       for trace in traces {
         print_waveform(trace)

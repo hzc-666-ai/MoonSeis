@@ -1,5 +1,5 @@
 // MoonSeis module metadata.
-name = "Noverberrain/moonseis"
+name = "hzc-666-ai/moonseis"
 
 version = "0.1.0"
 

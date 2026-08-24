@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Noverberrain/moonseis/sid"
+package "hzc-666-ai/moonseis/sid"
 
 import {
   "moonbitlang/core/debug",

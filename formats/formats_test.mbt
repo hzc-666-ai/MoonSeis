@@ -80,3 +80,22 @@ test "CSV preserves gaps in the record time axis" {
   assert_true(csv.contains(",0.5,2"))
   assert_true(csv.contains(",2,3"))
 }
+
+///|
+test "analysis html report renders" {
+  let record = sample_record()
+  let trace = @trace.Trace::{
+    sid: record.sid(),
+    start: record.start_time(),
+    end: record.end_time().unwrap(),
+    sample_rate: 20.0,
+    samples: record.samples(),
+    records: [record],
+  }
+  let html = analysis_html([trace])
+  assert_true(html.contains("MoonSeis 分析报告"))
+  assert_true(html.contains("Max amplitude"))
+  assert_true(html.contains("Score:"))
+  assert_true(html.contains("Waveform preview"))
+  assert_true(html.contains("<polyline"))
+}

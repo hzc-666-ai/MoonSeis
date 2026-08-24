@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Noverberrain/moonseis/binary"
+package "hzc-666-ai/moonseis/binary"
 
 // Values
 pub fn concat(Array[Bytes]) -> Bytes
