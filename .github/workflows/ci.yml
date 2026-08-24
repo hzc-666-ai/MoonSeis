@@ -13,3 +13,7 @@ jobs:
       - uses: hustcer/setup-moonbit@v1
       - run: moon check
       - run: moon test
+      - run: moon run cmd/main -- inspect fixtures/example.mseed
+      - run: moon run cmd/main -- report fixtures/example.mseed json > analysis.json
+      - run: python -m json.tool analysis.json > /dev/null
+      - run: moon run cmd/main -- convert fixtures/example.mseed html > report.html

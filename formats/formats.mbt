@@ -73,6 +73,193 @@ pub fn events_markdown(events : Array[@trigger.Event]) -> String {
 }
 
 ///|
+pub fn analysis_json(
+  items : Array[Result[@record.Record, @miniseed3.ParseError]],
+) -> String {
+  let records = valid_records(items)
+  let traces = @trace.build_traces(records)
+  let segments = @trace.inspect_segments(records)
+  let mut total_samples = 0
+  let mut total_events = 0
+  let mut total_issues = 0
+  let mut total_score = 0
+  for trace in traces {
+    total_samples = total_samples + trace.sample_count()
+    let events = @trigger.classic_sta_lta(trace.samples())
+    let report = @quality.inspect_trace(trace, @quality.default_rules())
+    total_events = total_events + events.length()
+    total_issues = total_issues + report.issue_count()
+    total_score = total_score + report.score()
+  }
+  let average_score = if traces.is_empty() {
+    0
+  } else {
+    (total_score.to_double() / traces.length().to_double()).round().to_int()
+  }
+  let mut out = "{"
+  out = out + "\"schema\":\"moonseis.analysis.v1\","
+  out = out + "\"summary\":{"
+  out = out + "\"record_count\":\{items.length()},"
+  out = out + "\"valid_records\":\{records.length()},"
+  out = out + "\"parse_errors\":\{items.length() - records.length()},"
+  out = out + "\"trace_count\":\{traces.length()},"
+  out = out + "\"sample_count\":\{total_samples},"
+  out = out + "\"event_count\":\{total_events},"
+  out = out + "\"issue_count\":\{total_issues},"
+  out = out + "\"average_score\":\{average_score}"
+  out = out + "},"
+  out = out + segment_report_json(segments) + ","
+  out = out + parse_errors_json(items) + ","
+  out = out + "\"traces\":["
+  let mut trace_index = 0
+  for trace in traces {
+    if trace_index > 0 {
+      out = out + ","
+    }
+    let report = @quality.inspect_trace(trace, @quality.default_rules())
+    let events = @trigger.classic_sta_lta(trace.samples())
+    out = out + trace_report_json(trace, report, events)
+    trace_index = trace_index + 1
+  }
+  out = out + "]}"
+  out
+}
+
+///|
+fn valid_records(
+  items : Array[Result[@record.Record, @miniseed3.ParseError]],
+) -> Array[@record.Record] {
+  let records : Array[@record.Record] = []
+  for item in items {
+    match item {
+      Ok(record) => records.push(record)
+      Err(_) => ()
+    }
+  }
+  records
+}
+
+///|
+fn segment_report_json(report : @trace.SegmentReport) -> String {
+  let mut out = "\"segments\":{"
+  out = out + "\"gap_count\":\{report.gap_count()},"
+  out = out + "\"overlap_count\":\{report.overlap_count()},"
+  out = out + "\"duplicate_count\":\{report.duplicate_count()},"
+  out = out + "\"rate_change_count\":\{report.rate_change_count()},"
+  out = out + "\"total_gap_seconds\":\{fmt3(report.total_gap_seconds())},"
+  out = out + "\"issues\":["
+  let mut index = 0
+  for issue in report.issues() {
+    if index > 0 {
+      out = out + ","
+    }
+    out = out + "{"
+    out = out + "\"kind\":\"\{segment_kind_name(issue.kind())}\","
+    out = out + "\"at\":\"\{issue.at().to_iso8601()}\","
+    out = out + "\"detail\":\"\{json_escape(issue.detail())}\""
+    out = out + "}"
+    index = index + 1
+  }
+  out = out + "]}"
+  out
+}
+
+///|
+fn parse_errors_json(
+  items : Array[Result[@record.Record, @miniseed3.ParseError]],
+) -> String {
+  let mut out = "\"parse_errors\":["
+  let mut item_index = 0
+  let mut error_index = 0
+  for item in items {
+    match item {
+      Ok(_) => ()
+      Err(error) => {
+        if error_index > 0 {
+          out = out + ","
+        }
+        out = out +
+          "{\"record_index\":\{item_index},\"message\":\"\{json_escape(error.to_string())}\"}"
+        error_index = error_index + 1
+      }
+    }
+    item_index = item_index + 1
+  }
+  out = out + "]"
+  out
+}
+
+///|
+fn trace_report_json(
+  trace : @trace.Trace,
+  report : @quality.QualityReport,
+  events : Array[@trigger.Event],
+) -> String {
+  let metrics = report.metrics()
+  let mut out = "{"
+  out = out + "\"sid\":\"\{json_escape(trace.sid())}\","
+  out = out + "\"start\":\"\{trace.start_time().to_iso8601()}\","
+  out = out + "\"end\":\"\{trace.end_time().to_iso8601()}\","
+  out = out + "\"sample_rate\":\{fmt3(trace.sample_rate())},"
+  out = out + "\"duration_seconds\":\{fmt3(trace.duration_secs())},"
+  out = out + "\"sample_count\":\{trace.sample_count()},"
+  out = out + "\"record_count\":\{trace.records().length()},"
+  out = out + "\"score\":\{report.score()},"
+  out = out + "\"metrics\":{"
+  out = out + "\"max_amplitude\":\{fmt3(metrics.max_amplitude())},"
+  out = out + "\"mean\":\{fmt3(metrics.mean())},"
+  out = out + "\"stddev\":\{fmt3(metrics.stddev())},"
+  out = out + "\"clip_ratio\":\{fmt3(metrics.clip_ratio())},"
+  out = out + "\"constant_runs\":\{metrics.constant_runs()},"
+  out = out + "\"completeness\":\{fmt3(metrics.completeness())}"
+  out = out + "},"
+  out = out + quality_issues_json(report.issues()) + ","
+  out = out + events_json(trace, events)
+  out = out + "}"
+  out
+}
+
+///|
+fn quality_issues_json(issues : Array[@quality.Issue]) -> String {
+  let mut out = "\"issues\":["
+  let mut index = 0
+  for issue in issues {
+    if index > 0 {
+      out = out + ","
+    }
+    out = out +
+      "{\"severity\":\"\{severity_name(issue.severity())}\",\"message\":\"\{json_escape(issue.message())}\"}"
+    index = index + 1
+  }
+  out = out + "]"
+  out
+}
+
+///|
+fn events_json(trace : @trace.Trace, events : Array[@trigger.Event]) -> String {
+  let mut out = "\"events\":["
+  let mut index = 0
+  for event in events {
+    if index > 0 {
+      out = out + ","
+    }
+    out = out + "{"
+    out = out + "\"start_index\":\{event.start_index()},"
+    out = out + "\"end_index\":\{event.end_index()},"
+    out = out +
+      "\"start_time\":\"\{event_time_text(trace, event.start_index())}\","
+    out = out + "\"end_time\":\"\{event_time_text(trace, event.end_index())}\","
+    out = out + "\"peak_ratio\":\{fmt3(event.peak_ratio())},"
+    out = out + "\"confidence\":\{fmt3(event.confidence())},"
+    out = out + "\"type\":\"\{trigger_type_name(event.trigger_type())}\""
+    out = out + "}"
+    index = index + 1
+  }
+  out = out + "]"
+  out
+}
+
+///|
 pub fn analysis_html(traces : Array[@trace.Trace]) -> String {
   let mut total_records = 0
   let mut total_samples = 0
@@ -369,6 +556,16 @@ fn trigger_type_name(trigger_type : @trigger.TriggerType) -> String {
 }
 
 ///|
+fn segment_kind_name(kind : @trace.SegmentKind) -> String {
+  match kind {
+    Gap => "Gap"
+    Overlap => "Overlap"
+    Duplicate => "Duplicate"
+    RateChange => "RateChange"
+  }
+}
+
+///|
 fn event_time_text(trace : @trace.Trace, index : Int) -> String {
   let rate = trace.sample_rate()
   if rate <= 0.0 {
@@ -381,19 +578,16 @@ fn event_time_text(trace : @trace.Trace, index : Int) -> String {
 ///|
 fn html_escape(value : String) -> String {
   let mut output = ""
-  let mut i = 0
-  while i < value.length() {
-    let char = value[i]
+  for char in value {
     let escaped = match char {
       '&' => "&amp;"
       '<' => "&lt;"
       '>' => "&gt;"
       '"' => "&quot;"
       '\'' => "&#39;"
-      _ => char.to_string()
+      _ => String::make(1, char)
     }
     output = output + escaped
-    i = i + 1
   }
   output
 }
@@ -406,19 +600,16 @@ fn fmt3(value : Double) -> String {
 ///|
 fn json_escape(value : String) -> String {
   let mut output = ""
-  let mut i = 0
-  while i < value.length() {
-    let char = value[i]
+  for char in value {
     let escaped = match char {
       '"' => "\\\""
       '\\' => "\\\\"
       '\n' => "\\n"
       '\r' => "\\r"
       '\t' => "\\t"
-      _ => char.to_string()
+      _ => String::make(1, char)
     }
     output = output + escaped
-    i = i + 1
   }
   output
 }

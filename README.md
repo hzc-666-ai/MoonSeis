@@ -1,5 +1,7 @@
 # MoonSeis
 
+[![CI](https://github.com/hzc-666-ai/MoonSeis/actions/workflows/ci.yml/badge.svg)](https://github.com/hzc-666-ai/MoonSeis/actions/workflows/ci.yml)
+
 MoonSeis 是一个使用 [MoonBit](https://www.moonbitlang.com/) 编写的 miniSEED 3 波形分析工具包。它面向地震波形数据的轻量处理流程，提供 miniSEED 记录解析、连续波形重建、质量检查、信号预处理、STA/LTA 事件候选检测，以及多格式命令行输出。
 
 > 注意：MoonSeis 输出的事件检测结果是算法候选，不是权威地震结论，也不应直接用于安全关键决策。
@@ -52,6 +54,7 @@ moon run cmd/main -- <command> <file> [format]
 | `quality` | 执行默认质量规则并生成评分 |
 | `detect` | 对每条 trace 运行 Classic STA/LTA 事件候选检测 |
 | `convert` | 转换为 `json`、`csv`、`geocsv`、`md`、`html` 或 `text` |
+| `report` | 输出完整的 JSON 分析报告 |
 
 常用示例：
 
@@ -62,6 +65,7 @@ moon run cmd/main -- quality fixtures/example.mseed
 moon run cmd/main -- detect fixtures/example.mseed
 moon run cmd/main -- convert fixtures/example.mseed csv
 moon run cmd/main -- convert fixtures/example.mseed html > report.html
+moon run cmd/main -- report fixtures/example.mseed json > analysis.json
 ```
 
 退出码约定：
@@ -107,6 +111,32 @@ docs/               设计、实施计划与架构说明
 ```
 
 更多内部设计见 [`docs/architecture.md`](docs/architecture.md)。
+
+## 验收演示
+
+正式验收时可以直接按下面顺序演示：
+
+```powershell
+moon check
+moon test
+moon run cmd/main -- inspect fixtures/example.mseed
+moon run cmd/main -- report fixtures/example.mseed json > analysis.json
+moon run cmd/main -- convert fixtures/example.mseed html > report.html
+```
+
+其中 `analysis.json` 适合机器校验，`report.html` 可直接打开查看波形和事件高亮。
+
+## 验收准备
+
+当前仓库已提供正式验收常用证据：
+
+- 可复现构建与测试：`moon check`、`moon test`
+- 可运行 CLI：`inspect`、`validate`、`quality`、`detect`、`convert`、`report`
+- 可视化产物：`convert ... html` 生成自包含 HTML 报告
+- 机器可读产物：`report ... json` 输出完整分析报告，便于 CI、前端或二次处理接入
+- GitHub Actions：CI 会执行 MoonBit 检查、测试和 CLI 烟测
+
+正式验收前还建议确认：仓库默认分支为 `master`，GitHub Actions 最近一次运行通过，并按比赛要求完成 mooncakes.io 发布。
 
 ## 当前限制
 

@@ -11,9 +11,10 @@ fn usage() -> Unit {
   println("")
   println("Usage: moon run cmd/main -- <command> <file> [format]")
   println(
-    "Commands: inspect, records, validate, traces, quality, detect, convert",
+    "Commands: inspect, records, validate, traces, quality, detect, convert, report",
   )
   println("Formats for convert: json, csv, geocsv, md, html, text")
+  println("Formats for report: json")
 }
 
 ///|
@@ -49,6 +50,13 @@ fn main {
         println("error: convert requires a format")
         exit_process(1)
       } else if !command_convert(raw, args[3]) {
+        exit_process(1)
+      }
+    "report" =>
+      if args.length() < 4 {
+        println("error: report requires a format")
+        exit_process(1)
+      } else if !command_report(raw, args[3]) {
         exit_process(1)
       }
     _ => {
@@ -185,6 +193,18 @@ fn command_detect(raw : Bytes) -> Unit {
       index = index + 1
     }
   }
+}
+
+///|
+fn command_report(raw : Bytes, format : String) -> Bool {
+  match format {
+    "json" => println(@formats.analysis_json(@record.iterate_records(raw)))
+    _ => {
+      println("error: unknown report format '\{format}'")
+      return false
+    }
+  }
+  true
 }
 
 ///|

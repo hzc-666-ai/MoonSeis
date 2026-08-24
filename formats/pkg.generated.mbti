@@ -2,6 +2,7 @@
 package "hzc-666-ai/moonseis/formats"
 
 import {
+  "hzc-666-ai/moonseis/miniseed3",
   "hzc-666-ai/moonseis/record",
   "hzc-666-ai/moonseis/trace",
   "hzc-666-ai/moonseis/trigger",
@@ -9,6 +10,8 @@ import {
 
 // Values
 pub fn analysis_html(Array[@trace.Trace]) -> String
+
+pub fn analysis_json(Array[Result[@record.Record, @miniseed3.ParseError]]) -> String
 
 pub fn events_markdown(Array[@trigger.Event]) -> String
 

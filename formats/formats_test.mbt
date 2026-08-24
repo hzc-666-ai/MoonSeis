@@ -99,3 +99,14 @@ test "analysis html report renders" {
   assert_true(html.contains("Waveform preview"))
   assert_true(html.contains("<polyline"))
 }
+
+///|
+test "analysis json report renders" {
+  let record = sample_record()
+  let items = [Ok(record)]
+  let json = analysis_json(items)
+  assert_true(json.contains("moonseis.analysis.v1"))
+  assert_true(json.contains("\"trace_count\":1"))
+  assert_true(json.contains("\"segments\""))
+  assert_true(json.contains("\"traces\""))
+}

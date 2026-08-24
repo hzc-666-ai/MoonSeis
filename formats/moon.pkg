@@ -3,6 +3,7 @@ import {
   "hzc-666-ai/moonseis/trace",
   "hzc-666-ai/moonseis/trigger",
   "hzc-666-ai/moonseis/quality",
+  "hzc-666-ai/moonseis/miniseed3",
 }
 
 import {
